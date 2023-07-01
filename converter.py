@@ -5,7 +5,7 @@ import sys
 import os
 
 def log(message) -> None:
-    print(f'[CONVERTER] {message}')
+    print(f'[CONVERTER] {message}' + '.' * message[-1] != '.')
 
 # Deleting the old database
 # if exists
@@ -74,4 +74,12 @@ log('Commited.')
 
 # closing the database connection
 connection.close()
-log('Connection closed.')
+log('Connection closed')
+
+while True:
+    ans = input('Do you want to delete dump.csv? [Y/n]: ').lower()
+    if ans == 'y':
+        log('Deleting dump.csv...')
+        os.remove('dump.csv')
+        break
+    elif ans == 'n': break
