@@ -4,9 +4,13 @@ import sqlite3
 import sys
 import os
 
+def log(message) -> None:
+    print(f'[CONVERTER] {message}')
+
 # Deleting the old database
 # if exists
 if os.path.exists('dump.db'):
+    log('Found old database. Deleting...')
     os.remove('dump.db')
 
 maxInt = sys.maxsize
@@ -23,6 +27,7 @@ while True:
 
 # Connecting to the database
 connection = sqlite3.connect('dump.db')
+log('Connected to dump.db')
 
 # Creating a cursor object to execute
 # SQL queries on a database table
@@ -41,6 +46,7 @@ create_table = '''CREATE TABLE write(
 # Creating the table into our
 # database
 cursor.execute(create_table)
+log('Created table')
 
 # Opening the dump.csv file
 file = open('dump.csv')
@@ -49,6 +55,7 @@ file = open('dump.csv')
 # dump.csv file
 
 contents = csv.reader(file, delimiter=';')
+log('dump.csv parsed')
 
 # SQL query to insert data into the
 # write table
@@ -56,17 +63,15 @@ insert_records = "INSERT INTO write (ip, url, page, law, cause, date) VALUES(?, 
 
 # Importing the contents of the file
 # into our table
+log('Inserting data into database...')
 cursor.executemany(insert_records, contents)
-
-# SQL query to retrieve all data from
-# the table To verify that the
-# data of the csv file has been successfully
-# inserted into the table
-select_all = "SELECT * FROM write"
-rows = cursor.execute(select_all).fetchall()
+log('Data inserted.')
 
 # Committing the changes
+log('Commiting changes...')
 connection.commit()
+log('Commited.')
 
 # closing the database connection
 connection.close()
+log('Connection closed.')
