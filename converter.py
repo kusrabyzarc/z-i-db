@@ -5,7 +5,7 @@ import sys
 import os
 
 def log(message) -> None:
-    print(f'[CONVERTER] {message}' + '.' * message[-1] != '.')
+    print(f'[CONVERTER] {message}' + '.' * int(message[-1] != '.'))
 
 # Deleting the old database
 # if exists
@@ -49,23 +49,23 @@ cursor.execute(create_table)
 log('Created table')
 
 # Opening the dump.csv file
-file = open('dump.csv')
+with open('dump.csv') as file:
 
-# Reading the contents of the
-# dump.csv file
+    # Reading the contents of the
+    # dump.csv file
 
-contents = csv.reader(file, delimiter=';')
-log('dump.csv parsed')
+    contents = csv.reader(file, delimiter=';')
+    log('dump.csv parsed')
 
-# SQL query to insert data into the
-# write table
-insert_records = "INSERT INTO write (ip, url, page, law, cause, date) VALUES(?, ?, ?, ?, ?, ?)"
+    # SQL query to insert data into the
+    # write table
+    insert_records = "INSERT INTO write (ip, url, page, law, cause, date) VALUES(?, ?, ?, ?, ?, ?)"
 
-# Importing the contents of the file
-# into our table
-log('Inserting data into database...')
-cursor.executemany(insert_records, contents)
-log('Data inserted.')
+    # Importing the contents of the file
+    # into our table
+    log('Inserting data into database...')
+    cursor.executemany(insert_records, contents)
+    log('Data inserted.')
 
 # Committing the changes
 log('Commiting changes...')
